@@ -1,5 +1,166 @@
+/*
+Color palette
+
+Grey: #dbdbdb
+Light Blue: #28a2ff
+Dark Blue: #003660
+Greyblue light: #bacdb8
+*/
+
+
 body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background-color: #bacbd8;
+}
+footer{
+  height: 50px;
+  background-color: #003660;
+  
+  
+}
+.header{
+  margin-bottom: 20px;
+}
+.card{
+  padding: 10px;
+
+}
+.icon-menu{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+.expense-list{
+  margin-top: 10px;
+}
+.expense-item{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 20px;
+}
+.list{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.form-close-btn{
+  display: flex;
+  justify-content: flex-end;
+
+}
+.product-modal-btn{
+  display: flex;
+  justify-content: space-evenly;
+}
+.slider-value{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+  font-weight: bold;
+}
+.price-modal{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.price-modal-btn{
+  padding: 25px;
+  margin-top: 10px;
+}
+.add-modal{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.menu-text{
+  text-decoration-line: none !important;
+}
+.drawer-item{
+  margin: 15px 10px;
+}
+.note-card{
+  padding: 10px;
+}
+
+.sales-expense{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.sales-snapshot{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.sales-text{
+  font-size: 24px;
+  text-shadow: 50
+  
+}
+.sales{
+  font-size: 20px;
+  padding: 15px;
+  color: blue
+}
+.exp-snapshot{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}
+.exp-text{
+  font-size: 24px;
+}
+.exp{
+  font-size: 20px;
+  padding: 15px;
+  color: red
+}
+.profit-snapshot{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.profit-text{
+  font-size: 32px;
+}
+.profit{
+  font-size: 30px;
+  color: greenyellow;
+  padding: 10px
+}
+.vl{
+  border-left: 1px dotted black;
+  height: 100px;
+
+}
+.drawer{
+  background-color: black;
+}
+.logout-container{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20px;
+  color: #003660;
+}
+.logout-text{
+  font-size: 14px;
+  font-weight: bold;
 }
