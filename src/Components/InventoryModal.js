@@ -32,6 +32,7 @@ const InventoryModal = props =>(
             <RaisedButton
                 label ="Stock"
                 backgroundColor= "#54ff00"
+                onClick = {props.stockBtnAction}
                 />
             <RaisedButton
                 label = {props.sellBtn}

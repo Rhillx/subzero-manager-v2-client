@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import DatePicker from 'material-ui/DatePicker';
 import TextField from 'material-ui/TextField';

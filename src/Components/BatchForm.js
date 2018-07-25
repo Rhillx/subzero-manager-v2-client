@@ -92,7 +92,7 @@ class BatchForm extends Component{
 
 
     render(){
-        const idVal = "ID Number:"+""+ 0
+        const idVal = "ID Number: "+" " + 0
 
 
         console.log(this.state)

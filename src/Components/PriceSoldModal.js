@@ -10,7 +10,7 @@ import KeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-arrow-lef
 
 const prices = [];
 for (let i = 8; i <= 40; i++){
-    prices.push(<MenuItem value={i} key={i} primaryText={"$"+`${i}`}/> )
+    prices.push(<MenuItem value={i} key={i} primaryText={"$ " + `${i}`}/> )
 }
 
 class PriceSoldModal extends Component{

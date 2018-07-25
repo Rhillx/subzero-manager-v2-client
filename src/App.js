@@ -1,8 +1,8 @@
 // importing modules needed
 import React, { Component } from 'react';
-import {Provider} from 'react-redux';
-import thunk from 'redux-thunk';
-import {applyMiddleware, createStore} from 'redux'
+// import {Provider} from 'react-redux';
+// import thunk from 'redux-thunk';
+// import {applyMiddleware, createStore} from 'redux'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {BrowserRouter as Router} from 'react-router-dom';
 import Route from 'react-router-dom/Route';
@@ -13,7 +13,7 @@ import TransactionLog from './Components/TransactionLog';
 import BatchList from './Components/BatchList';
 import NotePage from './Components/NotePage';
 // Importing files
-import rootReducers from './Reducers';
+// import rootReducers from './Reducers';
 
 
 
@@ -24,13 +24,12 @@ class App extends Component {
 
 
   render(){
-    const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
-    const store = createStoreWithMiddleware(rootReducers)
+    // const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+    // const store = createStoreWithMiddleware(rootReducers)
 
     return (
 
       <div className="App">
-      <Provider store={store}>
         <MuiThemeProvider>
           <Router>
             <div>
@@ -42,7 +41,7 @@ class App extends Component {
             </div>
           </Router>
         </MuiThemeProvider>
-      </Provider>
+     
       </div>
     );
   }

@@ -16,7 +16,7 @@ const IconicMenu = props =>(
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
             >
                 <MenuItem primaryText={props.menuOne} onClick={props.addModalAction} />
-                <MenuItem primaryText={props.menuTwo} />
+                <MenuItem primaryText={props.menuTwo} onClick={props.showCheckboxes}/>
             </IconMenu>
         </div>
             <AddInventoryModal open={props.addModalStatus} close={props.addModalAction}/>
