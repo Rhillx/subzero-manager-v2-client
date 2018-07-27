@@ -1,6 +1,5 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
-import DatePicker from 'material-ui/DatePicker';
 import TextField from 'material-ui/TextField';
 import Clear from 'material-ui/svg-icons/content/clear'
 import RaisedButton from 'material-ui/RaisedButton';
@@ -23,19 +22,30 @@ const TransactionForm = props => (
             </div>
             <TextField
                 hintText="Custy Name"
+                onChange= {props.onCustomerNameChange}
             />
             <br/>
             <TextField
                 hintText="Product Purchased"
+                value={props.productSelected}
             />
+               <br/>
+            <TextField
+                hintText="Quanity Purchased"
+                value={props.quanity}
+            />
+               <br/>
             <TextField
                 hintText="Amount Paid"
+                onChange={props.onAmountPaidChange}
             />
-            <DatePicker hintText="Select Date"/>
+    
 
-            <RaisedButton>
-                Add
-                </RaisedButton>
+            <RaisedButton
+                label="Submit"
+                onClick={props.onSubmit}
+                />
+                
 
             
         </Dialog>

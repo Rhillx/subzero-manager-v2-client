@@ -15,11 +15,12 @@ class ProductInventoryCard extends Component {
         addModalIsOpen: false,
          products: [],
          showCheckboxes: false,
-         checked: [],
-
+         checked: null,
          itemDisabled: false,
+         itemChecked: {},
     }
 
+// GETTING DATA FOR PRODUCT INVENTORY FROM MYSQL DATABASE
     componentDidMount(){
             fetch('/api/product')
             .then(res => res.json())
@@ -29,6 +30,8 @@ class ProductInventoryCard extends Component {
               .then(products => this.setState({products}))
         }
 
+
+// FUNCTION TO TOGGLE CHECK BOXES FOR DELETING INVENTORY
         toggleCheckboxes=()=>{
             if(this.state.checkbox){
                 this.setState({showCheckboxes: false, itemDisabled: false});
@@ -37,7 +40,10 @@ class ProductInventoryCard extends Component {
             }
 
         }
+// END FUNCTION \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+
+// FUNCTION TO DELETE PRODUCT INVENTORY FROM MYSQL DATABASE
         deleteProduct = () =>{
             const fv = this.state.checked
 
@@ -50,29 +56,39 @@ class ProductInventoryCard extends Component {
                 body: JSON.stringify({fv: fv})
             })
             .catch(err => console.log(err))
-     
-            
-        }
+     }
+// END \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-        renderCheckbox=(flavor)=>{
+//CHECKBOX FUNCTION
+    itemChecked = (child, e) =>{
+        let itemChecked = this.state.itemChecked;
+      itemChecked[child.id] = e.target.checked;
+        this.setState({itemChecked})
+    }
+
+// RENDER CHECKBOX TO PRODUCT LIST ITEM
+        renderCheckbox=(child)=>{
             if(this.state.showCheckboxes){
-                const checkedArr = []
-                checkedArr.push(flavor)
-
                 return <Checkbox
-                        
-                        onCheck={() =>this.setState({checked: flavor}) }
 
-                       />
-            }
-            else{
+                        onCheck={(e)=>console.log(this)}
+
+                            />
+            }else{
                 return null
             }
-        }
+        };
+
+//END \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+//RENDER PRODUCT LIST ITEM 
         renderProducts = ()=>{
             return this.state.products.map(product => <ProductListItem key={product.flavor} product={product} checkbox={this.renderCheckbox} disable={this.state.itemDisabled}/>)
         }
+//END\\\\\\\\\\\\\\\\\\\
 
+
+//TOGGLE ICON MENU BUTTON WHEN REMOVING A PRODUCT ITEM
         toggleIconMenuBtn = () =>{
             if(!this.state.showCheckboxes){
                 return <IconicMenu 
@@ -95,37 +111,39 @@ class ProductInventoryCard extends Component {
                                 />
             }
         }
+    //END\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-toggleAddModal =()=>{
-    if(!this.state.addModalIsOpen){
-        this.setState({addModalIsOpen: true})
-    } else{
-        this.setState({addModalIsOpen: false})
-    }
-}
 
-render(){
-    console.log(this)
-    return(
-        <Card zDepth ={2} style={style.cardStyle}>
-           
+    //ADD PRODUCT MODAL
+            toggleAddModal =()=>{
+                if(!this.state.addModalIsOpen){
+                    this.setState({addModalIsOpen: true})
+                } else{
+                    this.setState({addModalIsOpen: false})
+                }
+            }
+    //END\\\\\\\\\\\\\\\
+
+    render(){
+       console.log(this.state)
+        return(
+            <Card zDepth ={2} style={style.cardStyle}>
             <CardHeader
-                title = "Product Inventory"
-                showExpandableButton = {true}
-            />
-         
+                    title = "Product Inventory"
+                    showExpandableButton = {true}
+                />
             <CardText expandable={true} style={style.cardTextOne}>
-                    {this.toggleIconMenuBtn()}
-                <List>
-                    {this.renderProducts()}
-                </List>
-            </CardText>
-
-
-        </Card>
-    )
-}
-}
+                    <div className = 'icon-menu'>
+                        {this.toggleIconMenuBtn()}
+                    </div>
+                    <List>
+                        {this.renderProducts()}
+                    </List>
+                </CardText>
+            </Card>
+        )
+    }
+};
 
 const style ={
     cardTextOne:{

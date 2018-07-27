@@ -9,7 +9,7 @@ import AddInventoryModal from './AddInventoryModal';
 
 const IconicMenu = props =>(
     <div>
-        <div className ="icon-menu">
+        <div >
             <IconMenu
                 iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
                 anchorOrigin={{horizontal: 'left', vertical: 'top'}}
