@@ -19,7 +19,7 @@ const IconicMenu = props =>(
                 <MenuItem primaryText={props.menuTwo} onClick={props.showCheckboxes}/>
             </IconMenu>
         </div>
-            <AddInventoryModal open={props.addModalStatus} close={props.addModalAction}/>
+            <AddInventoryModal open={props.addModalStatus} close={props.addModalAction} fetchProducts={props.fetchProducts}/>
     </div>
 )
 

@@ -164,3 +164,15 @@ footer{
   font-size: 14px;
   font-weight: bold;
 }
+.trash-icon-btn{
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  
+}
+.addBtn{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+}

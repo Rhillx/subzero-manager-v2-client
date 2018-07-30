@@ -12,42 +12,36 @@ class AddInventoryModal extends Component{
         quanity: ''
     }
 
-
-    addNewInventory = () =>{
-        const flavor = this.state.flavor;
-        const quanity = this.state.quanity;
-
-        console.log('BEFORE THE FETCH')
+//FUNCTION TO ADD NEW PRODUCT TO INVENTORY IN MYSQL
+//     addNewInventory = () =>{
+//         const flavor = this.state.flavor;
+//         const quanity = this.state.quanity;
         
-        fetch('/api/product/add', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({flavor:flavor, quanity:quanity})
-        })
-        .then(res =>res.json())
-        .catch(err => console.log(err))
-        .then(data =>console.log(data)).then(this.props.close())
-
-
-    }
-
+//         fetch('/api/product/add', {
+//             method: 'POST',
+//             headers: {
+//                 'Accept': 'application/json, text/plain, */*',
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({flavor:flavor, quanity:quanity})
+//         })
+//         .then(res =>res.json())
+//         .catch(err => console.log(err))
+//         .then(data =>console.log(data)).then(this.props.toggleModal1()).then(this.setState({flavor: '', quanity: ''}))
+//         .then(this.props.fetch())
+// }
+//END\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
     render(){
-        console.log(this.state)
+        console.log('add inv', this.state, this.props)
         return(
 
-            <Dialog open={this.props.open}>
-            <Clear onClick={this.props.close}/>
+            <Dialog open={this.props.modalOpen}>
+            <Clear onClick={this.props.toggleModal}/>
                 <div className="add-modal">
                     <TextField
                         hintText="Item Name"
                         onChange={(e) => this.setState({flavor: e.target.value})}
-                
-
-                        
                         /><br/>
                     <TextField
                         hintText="How Many?"
@@ -57,7 +51,7 @@ class AddInventoryModal extends Component{
                         />
                     <RaisedButton 
                         label= "add"
-                        onClick = {()=>this.addNewInventory()}
+                        onClick = {this.props.addNewInventory}
                         />
                 </div>
             </Dialog>

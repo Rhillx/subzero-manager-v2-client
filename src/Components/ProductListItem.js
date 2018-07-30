@@ -3,6 +3,7 @@ import {ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import InventoryModal from './InventoryModal';
 import TransactionForm from './TransactionForm';
+import ConfirmModal from './ConfirmModal';
 
 
 
@@ -14,10 +15,11 @@ class ProductListItem extends Component{
             modalIsOpen: false,
             productSelected: '',
             customerName: '',
-            amountPaid: 0
+            amountPaid: 0,
+            confirmModal: false
            }
 
-// FUCNTION TO UPDATE A PRODUCT ITEM IN MYSQL DATABASE
+// FUCNTION TO UPDATE (ADD) A PRODUCT ITEM IN MYSQL DATABASE
         updateProductBtnAdd = () =>{
             const ps = this.state.productSelected;
             const sv = this.state.sliderValue;
@@ -33,10 +35,11 @@ class ProductListItem extends Component{
             .then((res) => res.json())
             .then((data) => console.log(data))
             .catch(err => console.log(err))
+            .then(this.toggleModal()).then(this.props.fetchProducts())
         }
 //END\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-// FUCNTION TO UPDATE A PRODUCT ITEM IN MYSQL DATABASE
+// FUCNTION TO UPDATE (SUBTRACT) A PRODUCT ITEM IN MYSQL DATABASE
         updateProductBtnSub = () =>{
             const ps = this.state.productSelected;
             const sv = this.state.sliderValue;
@@ -52,10 +55,11 @@ class ProductListItem extends Component{
             .then((res) => res.json())
             .then((data) => console.log(data))
             .catch(err => console.log(err))
+            .then(this.toggleModal()).then(this.toggleTransactionForm())
         }
 //END\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-//POST NEW TRANSACTION
+//FUNCTION TO POST NEW TRANSACTION
     submitTransaction = () =>{
         const {customerName, amountPaid, sliderValue, productSelected} = this.state;
 
@@ -69,21 +73,33 @@ class ProductListItem extends Component{
         })
         .then(res => res.json())
         .then(data => console.log(data))
-        .then(this.updateProductBtnSub())
+        .then(this.updateProductBtnSub()).then(this.props.fetchProducts())
         .catch(err => console.log(err))
         
     };
 //END\\\\\\\\\\\\\\\\\\
+
+// FUNCTION TO DELETE PRODUCT INVENTORY FROM MYSQL DATABASE
+        deleteProduct = () =>{
+            const fv = this.state.productSelected
+            fetch('/api/product/delete', {
+                method: 'DELETE',
+                headers:{
+                    'Accept': 'application/json , text/plain , */*',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({fv: fv})
+            })
+            .catch(err => console.log(err))
+            .then(this.toggleConfirmModal()).then(this.toggleModal()).then(this.props.fetchProducts())
+        } 
+// END \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     
-
-
-
 //HANDLE THE VALUE OF SLIDER CHANGE WHEN UPDATING A PRODUCT ITEM
         handleSlideChange = (event, value)=>{
             this.setState({sliderValue: value})
         }
 //END\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
 
 //TOGGLE MODAL FOR UPDATING A PRODUCT QUANITY 
         toggleModal = () =>{
@@ -97,7 +113,7 @@ class ProductListItem extends Component{
 //END\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 
 //TOGGLE TRANSACTION FORM
-        toggleTransactionFrom = () =>{
+        toggleTransactionForm = () =>{
             if(this.state.formOpen){
                 this.setState({formOpen: false})
             } else {
@@ -107,35 +123,51 @@ class ProductListItem extends Component{
 //END\\\\\\\\\\\\\\\\\\\\\\
 
 //HANDLE TRANSACTION FROM CUSTOMER NAME CHANGE
-handleCustomerName = (e) =>{this.setState({customerName: e.target.value})};
+    handleCustomerName = (e) =>{this.setState({customerName: e.target.value})};
+//END\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
 //HANDLE TRANSACTION FORM AMOUNT PAID CHANGE
-handleAmountPaid = (e) =>{this.setState({amountPaid: e.target.value})}
+    handleAmountPaid = (e) =>{this.setState({amountPaid: e.target.value})}
+//END\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+//TOGGLE CONFIRM MODAL FUNCTION
+    toggleConfirmModal = () =>{
+        if(this.state.confirmModal){
+            this.setState({confirmModal: false})
+        }else{
+            this.setState({confirmModal: true})
+        }
+}
+//END\\\\\\\\\\\\\\\\\\\\\\\\
+
+
 
    
     render(){
             const {flavor, quanity} = this.props.product
-          
-        
         return(
             <div>
                 <ListItem 
                     primaryText={flavor} 
                     secondaryText={quanity} 
                     onClick={this.toggleModal}
-                    rightIcon={this.props.checkbox()}
-                    disabled={this.props.disable}
-                    
-                    />
+                />
+                <Divider/>
                 <InventoryModal 
                     sliderValue={this.state.sliderValue} 
                     onChange={this.handleSlideChange}
                     toggle={this.toggleModal}
                     open={this.state.modalIsOpen}
                     max={1000}
-                    sellBtn="Sold"
-                    sellBtnAction={this.toggleTransactionFrom}
+                    altBtn="Sold"
+                    altBtnAction={this.toggleTransactionForm}
                     stockBtnAction={this.updateProductBtnAdd}
-                    id={this.state.productSelected}
+                    deleteItem={this.toggleConfirmModal}
+                   />
+                <ConfirmModal 
+                    confirm={this.deleteProduct}
+                    modalOpen={this.state.confirmModal}
+                    close={this.toggleConfirmModal}
                 />
                 <TransactionForm 
                     open={this.state.formOpen} 
@@ -148,8 +180,6 @@ handleAmountPaid = (e) =>{this.setState({amountPaid: e.target.value})}
                     onAmountPaidChange = {this.handleAmountPaid}
                     onSubmit = {this.submitTransaction}
                 />
-                
-                <Divider/>
             </div>
 
         )

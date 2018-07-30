@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import{Card, CardHeader, CardText} from 'material-ui/Card';
 import {List} from 'material-ui/List';
-import Checkbox from 'material-ui/Checkbox';
-import RaisedButton from 'material-ui/RaisedButton';
-
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import AddInventoryModal from './AddInventoryModal';
 import ProductListItem from './ProductListItem';
-import IconicMenu from './IconMenu';
-
+import Add from 'material-ui/svg-icons/content/add';
 
 
 
@@ -14,107 +12,59 @@ class ProductInventoryCard extends Component {
     state={
         addModalIsOpen: false,
          products: [],
-         showCheckboxes: false,
-         checked: null,
-         itemDisabled: false,
-         itemChecked: {},
     }
 
-// GETTING DATA FOR PRODUCT INVENTORY FROM MYSQL DATABASE
-    componentDidMount(){
-            fetch('/api/product')
+//INITIALLY GETTING DATA FOR PRODUCT INVENTORY FROM MYSQL DATABASE
+    componentWillMount(){
+        this.fetchProducts()
+    }
+//END///////////////////////////////////////////////////
+
+//GET PRODUCTS FUCNTION
+    fetchProducts = () => {
+        fetch('/api/product')
             .then(res => res.json())
             .then(data => data.map(products =>{ 
                 return products
             }))
               .then(products => this.setState({products}))
         }
+//END\\\\\\\\\\\\\\\\\\
 
-
-// FUNCTION TO TOGGLE CHECK BOXES FOR DELETING INVENTORY
-        toggleCheckboxes=()=>{
-            if(this.state.checkbox){
-                this.setState({showCheckboxes: false, itemDisabled: false});
-            } else {
-                this.setState({showCheckboxes: true, itemDisabled:true})
-            }
-
-        }
-// END FUNCTION \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-
-// FUNCTION TO DELETE PRODUCT INVENTORY FROM MYSQL DATABASE
-        deleteProduct = () =>{
-            const fv = this.state.checked
-
-            fetch('/api/product/delete',{
-                method: 'DELETE',
-                headers:{
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({fv: fv})
-            })
-            .catch(err => console.log(err))
-     }
-// END \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-//CHECKBOX FUNCTION
-    itemChecked = (child, e) =>{
-        let itemChecked = this.state.itemChecked;
-      itemChecked[child.id] = e.target.checked;
-        this.setState({itemChecked})
-    }
-
-// RENDER CHECKBOX TO PRODUCT LIST ITEM
-        renderCheckbox=(child)=>{
-            if(this.state.showCheckboxes){
-                return <Checkbox
-
-                        onCheck={(e)=>console.log(this)}
-
-                            />
-            }else{
-                return null
-            }
-        };
-
-//END \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//FUNCTION TO ADD NEW PRODUCT TO INVENTORY
+    addNewInventory = () =>{
+        const flavor = this.state.flavor;
+        const quanity = this.state.quanity;
+        
+        fetch('/api/product/add', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({flavor:flavor, quanity:quanity})
+        })
+        .then(res =>res.json())
+        .catch(err => console.log(err))
+        .then(data =>console.log(data))
+        .then(this.toggleAddModal())
+        .then(this.fetchProducts())
+}
+//////////////////////////////////////////
 
 //RENDER PRODUCT LIST ITEM 
         renderProducts = ()=>{
-            return this.state.products.map(product => <ProductListItem key={product.flavor} product={product} checkbox={this.renderCheckbox} disable={this.state.itemDisabled}/>)
+            return this.state.products.map(product => 
+                <ProductListItem 
+                    key={product.flavor} 
+                    product={product} 
+                    fetchProducts={this.fetchProducts}
+                />
+            )
         }
 //END\\\\\\\\\\\\\\\\\\\
 
-
-//TOGGLE ICON MENU BUTTON WHEN REMOVING A PRODUCT ITEM
-        toggleIconMenuBtn = () =>{
-            if(!this.state.showCheckboxes){
-                return <IconicMenu 
-                    menuOne='Add New Product' 
-                    menuTwo='Remove Product' 
-                    addModalStatus={this.state.addModalIsOpen}
-                    addModalAction={this.toggleAddModal}
-                    showCheckboxes={this.toggleCheckboxes}
-                />
-            }else if(this.state.showCheckboxes && this.state.checked === null){
-                    return <RaisedButton 
-                                label= "Back"
-                                onClick={()=>this.setState({showCheckboxes: false})}
-                                />
-            } else {
-                return <RaisedButton 
-                                label= "Delete"
-                                backgroundColor='red'
-                                onClick={this.deleteProduct}
-                                />
-            }
-        }
-    //END\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-
-    //ADD PRODUCT MODAL
+//ADD PRODUCT MODAL
             toggleAddModal =()=>{
                 if(!this.state.addModalIsOpen){
                     this.setState({addModalIsOpen: true})
@@ -122,29 +72,39 @@ class ProductInventoryCard extends Component {
                     this.setState({addModalIsOpen: false})
                 }
             }
-    //END\\\\\\\\\\\\\\\
+//END\\\\\\\\\\\\\\\
+
 
     render(){
-       console.log(this.state)
+        console.log('prod card', this.props)
         return(
             <Card zDepth ={2} style={style.cardStyle}>
-            <CardHeader
-                    title = "Product Inventory"
+                <CardHeader
+                    title = "Product Inventory "
                     showExpandableButton = {true}
                 />
-            <CardText expandable={true} style={style.cardTextOne}>
-                    <div className = 'icon-menu'>
-                        {this.toggleIconMenuBtn()}
+                <CardText expandable={true} style={style.cardTextOne}>
+                    <div className="addBtn">
+                        <FloatingActionButton onClick={this.toggleAddModal}>
+                            <Add/>
+                        </FloatingActionButton>
                     </div>
                     <List>
                         {this.renderProducts()}
                     </List>
                 </CardText>
+                <AddInventoryModal 
+                    toggleModal={this.toggleAddModal} 
+                    modalOpen={this.state.addModalIsOpen} 
+                    addNewInventory={this.addNewInventory}
+                />
             </Card>
         )
     }
 };
 
+
+//STYLING FOR PRODUCT_INV CARD
 const style ={
     cardTextOne:{
         backgroundColor: "#dbdbdb",
