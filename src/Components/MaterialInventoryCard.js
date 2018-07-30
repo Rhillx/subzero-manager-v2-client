@@ -14,13 +14,15 @@ import MaterialListItem from './MaterialListItem';
 class MaterialInventoryCard extends Component {
     state={
         addModalIsOpen: false,
-        materials: []
+        materials: [],
+        item: '',
+        quanity: ''
     }
 
 //INITIALLY GET MATERIAL ITEMS
     componentWillMount(){
         this.fetchMaterials()
-    }
+    };
 ////////////////////////////
 
 //FUNCTION TO FETCH MATERIAL
@@ -34,6 +36,27 @@ class MaterialInventoryCard extends Component {
         }
 ////////////////////////////
 
+//FUNCTION TO ADD NEW PRODUCT TO INVENTORY
+    addNewInventory = () =>{
+        const item = this.state.item;
+        const quanity = this.state.quanity;
+        
+        fetch('/api/materials/post', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ item:item, quanity:quanity})
+        })
+        .then(res =>res.json())
+        .catch(err => console.log(err))
+        .then(data =>console.log(data))
+        .then(this.toggleAddModal())
+        .then(this.fetchMaterials())
+}
+//////////////////////////////////////////
+
 //RENDER MATERIAL LIST ITEM
     renderMaterials=()=>{
          return this.state.materials.map(material => 
@@ -44,14 +67,15 @@ class MaterialInventoryCard extends Component {
                 />
             )
     }
-
-toggleAddModal =()=>{
-    if(!this.state.addModalIsOpen){
-        this.setState({addModalIsOpen: true})
-    } else{
-        this.setState({addModalIsOpen: false})
+//TOGGLE ADD ITEM MODAL
+    toggleAddModal =()=>{
+        if(!this.state.addModalIsOpen){
+            this.setState({addModalIsOpen: true})
+        } else{
+            this.setState({addModalIsOpen: false})
+        }
     }
-}
+//////////////////////
 
 render(){
 
@@ -75,7 +99,10 @@ render(){
                 <AddInventoryModal 
                     toggleModal={this.toggleAddModal} 
                     modalOpen={this.state.addModalIsOpen} 
-                    fetch={this.fetchMaterials}
+                    addNewInventory={this.addNewInventory}
+                    itemOnChange={(e) => this.setState({item: e.target.value})}
+                    quanityOnChange={(e) => this.setState({quanity: e.target.value})}
+                    name='Item Name'
                 />
             </CardText>
 

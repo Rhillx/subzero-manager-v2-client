@@ -29,21 +29,23 @@ const ExpenseForm = props => (
         <TextField
             name='expense-item'
             hintText="Expense Item"
+            onChange={props.expenseItemChange}
         /><br />
         <TextField
             name='account receivable'
             hintText="Paid To"
+            onChange={props.paidToChange}
         /><br />
         <TextField
             name='amount'
             hintText="Amount Paid"
             type = "currency"
+            onChange={props.amountPaidChange}
             />
-        <DatePicker hintText="Today's Date" />
          <SelectField
           floatingLabelText="Paid From"
           value={props.value}
-          onChange={props.onChange}
+          onChange={props.paidFromChange}
         
         >
           <MenuItem value={1} primaryText="Sub-Zero Account" />
@@ -53,7 +55,7 @@ const ExpenseForm = props => (
           <MenuItem value={5} primaryText="Goon" />
        
         </SelectField>
-        <RaisedButton label="Submit" fullWidth={true} />
+        <RaisedButton label="Submit" fullWidth={true} onClick={props.submit}/>
         </Dialog>
 )
 

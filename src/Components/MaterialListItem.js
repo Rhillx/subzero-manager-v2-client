@@ -12,37 +12,86 @@ class MaterialListItem extends Component{
         state ={
             sliderValue: 0,
             modalIsOpen: false,
-            confirmModal: false
+            confirmModal: false,
+            itemSelected: '',
+
 
         }
 
 // FUCNTION TO UPDATE (ADD) A MATERIAL ITEM IN MYSQL DATABASE
     addMaterialStock = () =>{
-        console.log('ADD STOCK!')
+        const {itemSelected, sliderValue} = this.state
+
+        fetch('/api/materials/update-add', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json text/plain */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({item: itemSelected, valChanged: sliderValue})
+        })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch(err => console.log(err))
+        .then(this.toggleModal()).then(this.props.fetchMaterials())
     }
 /////////////////////////////////////////////////////////////
 
 //FUNCTION TO UPDATE (SUBTRACT) A MATERIAL ITEM IN MYSQL DATABASE
     subMaterialStock = ()=>{
-        console.log('USE STOCK!')
+        console.log('USE STOCK!', this.state)
+        const {itemSelected, sliderValue} = this.state
+
+        fetch('/api/materials/update-subtract', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json text/plain */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({item: itemSelected, valChanged: sliderValue})
+        })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch(err => console.log(err))
+        .then(this.toggleModal()).then(this.props.fetchMaterials())
     }
 ///////////////////////////////////////////////////////////////
 
 //FUNCTION TO DELETE MATERIAL ITEM FROM MYSQL DATABASE
     deleteMaterial = () =>{
-        console.log('DELETE ITEM!');
+        const {itemSelected} = this.state;
+
+        fetch('/api/materials/delete', {
+            method: 'DELETE',
+            headers:{
+                'Accept': 'application/json text/plain */*',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({item: itemSelected})
+        })
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch(err => console.log(err))
+        .then(this.toggleModal()).then(this.toggleConfirmModal())
+        .then(this.props.fetchMaterials())
     }
 /////////////////////////////////////////////////////
+
+//HANDLE SLIDER VALUE CHANGE
         handleSlideChange = (event, value)=>{
             this.setState({sliderValue: value})
         }
+///////////////////////////
+
+//TOGGLE INVENTORY MODAL
         toggleModal = () =>{
             if(!this.state.modalIsOpen){
-                this.setState({modalIsOpen: true})
+                this.setState({modalIsOpen: true, itemSelected: this.props.material.item})
             } else{
                 this.setState({modalIsOpen: false})
             }
         }
+///////////////////////
 
 //TOGGLE CONFIRM MODAL FUNCTION
     toggleConfirmModal = () =>{

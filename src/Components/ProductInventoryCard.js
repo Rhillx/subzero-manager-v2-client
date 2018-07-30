@@ -12,6 +12,8 @@ class ProductInventoryCard extends Component {
     state={
         addModalIsOpen: false,
          products: [],
+         flavor: '',
+         quanity: ''
     }
 
 //INITIALLY GETTING DATA FOR PRODUCT INVENTORY FROM MYSQL DATABASE
@@ -76,7 +78,7 @@ class ProductInventoryCard extends Component {
 
 
     render(){
-        console.log('prod card', this.props)
+        console.log('prod card', this.state)
         return(
             <Card zDepth ={2} style={style.cardStyle}>
                 <CardHeader
@@ -97,6 +99,9 @@ class ProductInventoryCard extends Component {
                     toggleModal={this.toggleAddModal} 
                     modalOpen={this.state.addModalIsOpen} 
                     addNewInventory={this.addNewInventory}
+                    itemOnChange={(e) => this.setState({flavor: e.target.value})}
+                    quanityOnChange={(e) => this.setState({quanity: e.target.value})}
+                    name='Product Name'
                 />
             </Card>
         )
