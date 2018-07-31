@@ -3,7 +3,7 @@ import {Card, CardText, CardHeader} from 'material-ui/Card';
 import Divider from 'material-ui/Divider';
 
 
-const NoteCard = () => (
+const NoteCard = props => (
     <div className="note-card">
     <Card>
         <CardHeader
@@ -11,7 +11,7 @@ const NoteCard = () => (
             showExpandableButton={true}
             />
         <CardText expandable={true}>
-            Hi im a note!
+            {props.note.note}
         </CardText>
     </Card>
     <Divider/>

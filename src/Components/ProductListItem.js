@@ -171,7 +171,7 @@ class ProductListItem extends Component{
                 />
                 <TransactionForm 
                     open={this.state.formOpen} 
-                    close={this.toggleTransactionFrom} 
+                    close={this.toggleTransactionForm} 
                     amountValue={"$"+ this.state.amountPaid}
                     customerNameValue={this.state.customerName}
                     productSelected = {this.state.productSelected}

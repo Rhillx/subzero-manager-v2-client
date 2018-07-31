@@ -18,7 +18,37 @@ const styles ={
 }
 
 class NotePage extends Component {
-    state = { drawerIsOpen: false, formOpen: false}
+    state = { 
+        drawerIsOpen: false, 
+        formOpen: false,
+        notes: []
+        
+        }
+
+//INITIALLY GET NOTES FROM MYSQL DATABASE
+    componentWillMount(){
+        this.fetchNotes();
+    };
+////////////////////////////////////////
+
+//FUCNTION TO GET NOTES FROM MYSQL DATABASE
+    fetchNotes = () => {
+         fetch('/api/notes')
+         .then(res => res.json())
+         .then(data => data.map(notes =>{
+             return notes
+         }))
+         .then(notes => this.setState({notes}))
+     }
+///////////////////////////////////////////
+
+
+//RENDER NOTES
+    renderNotes = () => {
+         return this.state.notes.map(note => <NoteCard key={note.id} note={note}/> )
+     }
+/////////////
+
 
     toggleDrawer = () => {
         if(this.state.drawerIsOpen){
@@ -57,8 +87,7 @@ class NotePage extends Component {
             </div>
             <div className='notes-list'>
                 <List>
-                    <NoteCard/>
-                    <NoteCard/>
+                    {this.renderNotes()}
                 </List>
             </div>
                 
