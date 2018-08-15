@@ -176,3 +176,8 @@ footer{
   align-items: center;
   padding: 10px;
 }
+.extractionText{
+  color: red;
+  font-style: italic;
+  font-weight: bold;
+}
